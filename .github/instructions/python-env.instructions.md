@@ -1,7 +1,8 @@
 ---
-globs: **/*.py
-alwaysApply: false
+description: "Use when: running Python commands, scripts, or tests. Ensures uv or venv is always used as the Python environment manager."
+applyTo: "**/*.py"
 ---
+
 # Python Environment
 
 Always use one of the following when running Python commands or scripts:

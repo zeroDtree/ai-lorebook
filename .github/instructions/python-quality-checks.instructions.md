@@ -1,7 +1,8 @@
 ---
-globs: **/*.py
-alwaysApply: false
+description: "Use when: finalizing Python code changes. Runs ruff and ty checks as quality gates before task completion."
+applyTo: "**/*.py"
 ---
+
 # Python Quality Checks
 
 Before finalizing Python code changes, run both checks:
