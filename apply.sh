@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-shopt -s nullglob
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -16,17 +15,17 @@ Options:
   -f, --force       Skip confirmation when overwriting existing files
   -d, --target-dir DIR
                     Target project directory (default: current directory)
-  --cursor          Copy only Cursor rules (.cursor/rules/*.mdc)
-  --copilot         Copy only Copilot instructions (.github/instructions/*.instructions.md)
-  --claude          Copy only Claude rules (.claude/rules/*.md)
+  --cursor          Copy only .cursor/ (rules, skills, etc.)
+  --copilot         Copy only .github/instructions/
+  --claude          Copy only .claude/rules/
   --all             Copy all (default)
 
 Examples:
-  $(basename "$0")                              # copy both to current dir
-  $(basename "$0") -d /path/to/project          # copy both to target
-  $(basename "$0") -d /path/to/project --cursor # cursor rules only
-  $(basename "$0") -d /path/to/project --copilot # copilot instructions only
-  $(basename "$0") -d /path/to/project --claude  # claude rules only
+  $(basename "$0")                              # copy all to current dir
+  $(basename "$0") -d /path/to/project          # copy all to target
+  $(basename "$0") -d /path/to/project --cursor # cursor only
+  $(basename "$0") -d /path/to/project --copilot # copilot only
+  $(basename "$0") -d /path/to/project --claude  # claude only
   $(basename "$0") -n                           # dry-run to current dir
 EOF
   exit 1
@@ -102,22 +101,26 @@ header() {
   echo "==> $*"
 }
 
-# Apply rules from a source directory to a target directory
-apply_rules() {
-  local src="$SCRIPT_DIR/$1"
-  local dest="$TARGET_DIR/$2"
-  local pattern="$3"
-  local label="$4"
+# Recursively copy a source directory tree to a target directory
+apply_dir() {
+  local src_rel="$1"
+  local dest_rel="$2"
+  local label="$3"
+  local src="$SCRIPT_DIR/$src_rel"
+  local dest="$TARGET_DIR/$dest_rel"
 
   if [[ ! -d "$src" ]]; then
     echo "warning: ${label} source directory not found: $src" >&2
     return 1
   fi
 
-  local files=("$src"/$pattern)
+  local files=()
+  while IFS= read -r -d '' file; do
+    files+=("$file")
+  done < <(find "$src" -type f -print0)
 
   if (( ${#files[@]} == 0 )); then
-    echo "warning: no $pattern files found in $src" >&2
+    echo "warning: no files found in $src" >&2
     return 1
   fi
 
@@ -125,35 +128,35 @@ apply_rules() {
 
   if $DRY_RUN; then
     echo "  (dry-run) would create: $dest"
+    local f rel
     for f in "${files[@]}"; do
-      echo "  (dry-run) would copy: $(basename "$f") -> $dest/"
+      rel="${f#"$src"/}"
+      echo "  (dry-run) would copy: $rel -> $dest/$rel"
     done
     return 0
   fi
 
-  mkdir -p "$dest"
-
   local copied=0 skipped=0
+  local f rel target_file target_dir
   for f in "${files[@]}"; do
-    local bname
-    bname="$(basename "$f")"
-    local target_file="$dest/$bname"
+    rel="${f#"$src"/}"
+    target_file="$dest/$rel"
+    target_dir="$(dirname "$target_file")"
+    mkdir -p "$target_dir"
 
-    # Check if target exists and we're not forcing
     if [[ -f "$target_file" && "$FORCE" != true ]]; then
-      # Compare content — skip if identical
       if cmp -s "$f" "$target_file"; then
-        echo "  skip (identical): $bname"
+        echo "  skip (identical): $rel"
         ((skipped++)) || true
         continue
       fi
-      echo "  skip (differs, use -f to overwrite): $bname"
+      echo "  skip (differs, use -f to overwrite): $rel"
       ((skipped++)) || true
       continue
     fi
 
-    cp "$f" "$dest/"
-    echo "  copied: $bname -> $dest/"
+    cp "$f" "$target_file"
+    echo "  copied: $rel -> $dest/$rel"
     ((copied++)) || true
   done
 
@@ -170,15 +173,15 @@ fi
 echo ""
 
 if [[ "$MODE" == "all" || "$MODE" == "cursor" ]]; then
-  apply_rules ".cursor/rules" ".cursor/rules" "*.mdc" "Cursor rules"
+  apply_dir ".cursor" ".cursor" "Cursor"
 fi
 
 if [[ "$MODE" == "all" || "$MODE" == "copilot" ]]; then
-  apply_rules ".github/instructions" ".github/instructions" "*.instructions.md" "Copilot instructions"
+  apply_dir ".github/instructions" ".github/instructions" "Copilot instructions"
 fi
 
 if [[ "$MODE" == "all" || "$MODE" == "claude" ]]; then
-  apply_rules ".claude/rules" ".claude/rules" "*.md" "Claude rules"
+  apply_dir ".claude/rules" ".claude/rules" "Claude rules"
 fi
 
 echo ""
