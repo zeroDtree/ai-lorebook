@@ -12,7 +12,7 @@ Full-repo or path-scoped security audit. Reason about code like a security resea
 
 - User asks for a security audit, vulnerability scan, or "is my code secure?"
 - User names a path to scan (e.g. "scan `src/auth/` for vulnerabilities")
-- User invokes `@security-review` or selects this skill explicitly
+- User invokes `/security-review` or `/security-review <path>` (Cursor slash command)
 
 This skill audits **codebase or directory scope** — not git diffs or PR-only review.
 

@@ -32,7 +32,19 @@ Examples:
 
 `--cursor` copies the full `.cursor/` tree (including `.cursor/rules/` and `.cursor/skills/`). Copilot instructions go to `<target>/.github/instructions/`, Claude rules to `<target>/.claude/rules/`. Identical files are skipped; differing files require `-f` to overwrite.
 
-Python Ruff + ty defaults live under `.cursor/skills/python-ruff-ty/` (`ruff.toml`, `ty.toml`); the skill copies them to the project root at lint time when missing.
+## Included skills
+
+Cursor skills live under `.cursor/skills/`. Invoke with `/skill-name` (e.g. `/python-ruff-ty`, `/security-review`); skills with `disable-model-invocation: true` load only when explicitly selected.
+
+| Skill | Purpose | Notes |
+| ----- | ------- | ----- |
+| `python-ruff-ty` | Run Ruff lint/format and ty type checks via `uv`; bootstrap `ruff.toml` / `ty.toml` from skill defaults when missing | Use when finalizing Python changes or fixing lint/type errors |
+| `security-review` | Full-repo or path-scoped security audit (dependencies, secrets, vuln categories, data-flow analysis) | Use **Agent mode** for dependency CLI audits (`npm audit`, `pip-audit`, etc.); invoke with `/security-review` or `/security-review src/auth/` |
+
+Brief usage examples:
+
+- **python-ruff-ty:** `/python-ruff-ty`
+- **security-review:** `/security-review` or `/security-review src/auth/`
 
 ## Included rules
 
