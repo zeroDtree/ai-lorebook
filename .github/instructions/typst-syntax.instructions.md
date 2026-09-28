@@ -1,6 +1,5 @@
 ---
-description: "Use when: writing Typst with inline code (backticks) and inline math (dollar signs). Prevents nesting code inside math or math inside code."
-applyTo: "**/*.typ"
+applyTo: '**/*.typ'
 ---
 
 # Typst Inline Code and Math

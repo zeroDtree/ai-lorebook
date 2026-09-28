@@ -1,5 +1,7 @@
 ---
-globs: **/*.py
+alwaysApply: false
+globs:
+  - '**/*.py'
 ---
 
 # Python Environment

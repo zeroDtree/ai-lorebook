@@ -1,6 +1,5 @@
 ---
-description: "Use when: finalizing Python code changes. Runs ruff and ty checks as quality gates before task completion."
-applyTo: "**/*.py"
+applyTo: '**/*.py'
 ---
 
 # Python Quality Checks

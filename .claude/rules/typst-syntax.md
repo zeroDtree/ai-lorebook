@@ -1,5 +1,8 @@
 ---
-globs: **/*.typ
+alwaysApply: false
+globs:
+  - '**/*.typ'
+description: Typst inline code and math must not be nested
 ---
 
 # Typst Inline Code and Math

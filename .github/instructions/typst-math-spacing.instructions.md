@@ -1,6 +1,5 @@
 ---
-description: "Use when: writing Typst math mode with subscript + function argument notation. Ensures proper spacing between subscript and argument list."
-applyTo: "**/*.typ"
+applyTo: '**/*.typ'
 ---
 
 # Typst Math Spacing

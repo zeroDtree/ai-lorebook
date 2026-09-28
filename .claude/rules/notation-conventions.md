@@ -1,5 +1,8 @@
 ---
-globs: **/*.typ,**/*.tex,**/*.md
+alwaysApply: false
+globs:
+  - '**/*.typ,**/*.tex,**/*.md'
+description: Math, logic, and computer notation conventions
 ---
 
 # Notation Conventions

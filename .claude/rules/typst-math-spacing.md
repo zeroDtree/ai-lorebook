@@ -1,5 +1,8 @@
 ---
-globs: **/*.typ
+alwaysApply: false
+globs:
+  - '**/*.typ'
+description: Typst math spacing and notation conventions for .typ files
 ---
 
 # Typst Math Spacing

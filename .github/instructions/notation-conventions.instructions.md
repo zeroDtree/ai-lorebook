@@ -1,6 +1,5 @@
 ---
-description: "Use when: writing math, logic, or computer network notation. Covers vector/matrix conventions, number sets, logic symbols, and network naming."
-applyTo: "**/*.typ,**/*.tex,**/*.md"
+applyTo: '**/*.typ,**/*.tex,**/*.md'
 ---
 
 # Notation Conventions
