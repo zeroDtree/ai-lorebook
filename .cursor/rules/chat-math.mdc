@@ -1,43 +1,43 @@
 ---
-description: Render math in Cursor chat with \( \) and \[ \], not dollar delimiters
+description: Render math in Cursor chat with \( \) and \[ \], avoiding dollar delimiters and Markdown block interrupts inside \[ \]
 alwaysApply: true
 ---
 
 # Chat Math Output
 
-This rule governs math in replies to the user. It does not govern source files whose language uses dollar math, such as Typst, which keeps `$...$` syntax.
+This rule governs math in chat replies to the user. It does not govern workspace files (such as Quartz `.md` notes or Typst `.typ` files), which keep their own math syntax.
 
-In chat, use LaTeX delimiters the chat renderer supports:
+## 1. Delimiters
+
+In chat, use only the LaTeX delimiters supported by the chat renderer:
 
 - Inline: `\(...\)`
 - Display: `\[...\]`
 
-Do not use `$...$` or `$$...$$` in chat. Single-dollar math is shown as raw source.
+Do not use `$...$` or `$$...$$` in chat. Write standard LaTeX (`\mathbf{z}`, `\mathcal{L}`, `\frac{a}{b}`), not Typst, inside those delimiters. Do not wrap math in backticks.
 
-Write LaTeX, not Typst, inside those delimiters: `\mathbf{z}`, `\mathcal{L}`, `\frac{a}{b}`. Do not wrap math in backticks.
+Put each formula in its own delimiter pair. Keep a display formula `\[...\]` on its own lines, with a blank line before `\[` and after `\]`.
+
+## 2. Prevent Markdown Block Interrupts Inside `\[...\]`
+
+The chat Markdown parser scans lines inside `\[...\]` for block-level Markdown constructs before passing math to KaTeX. Any line that triggers a Markdown block interrupt will prematurely close `\[...\]` and corrupt the rest of the formula.
+
+Inside `\[...\]`:
+
+1. **Never put `=` or `-` alone on its own line.** A line of text followed by a standalone `=` or `-` line is parsed as a Setext heading (`<h1>` / `<h2>`), even between `\end{array}\right)` and `\begin{pmatrix}`.
+2. **Never start a line with `- `, `+ `, `* `, `> `, or `#`.** These trigger Markdown lists, blockquotes, or ATX headings. If a wrapped line begins with a minus or plus sign, keep it on the previous line or indent/prefix it with `&` inside `\begin{aligned}`.
+3. **Never leave blank lines inside `\[...\]`.** A blank line splits the paragraph and breaks the display math block.
+4. **Keep single-chain equations on one line, or use `\begin{aligned}` with `&=`.**
 
 ```markdown
-<!-- ❌ BAD — dollar delimiters render as source -->
+<!-- ❌ BAD — dollar delimiters render as raw source -->
 下一词元是 $z_i^{t+\Delta t}$。
 
 $$
 \mathcal{L} = -\sum_i \log q_i
 $$
 
-<!-- ✅ GOOD -->
-下一词元是 \(z_i^{t+\Delta t}\)。
-
-\[
-\mathcal{L} = -\sum_i \log q_i
-\]
-```
-
-Put each formula in its own delimiter pair. Keep a display formula on its own lines, with a blank line before and after the block.
-
-Inside `\[...\]`, never put `=` or `-` alone on its own line. The chat Markdown parser treats `expr` followed by a standalone `=` or `-` line as a Setext heading (`<h1>` / `<h2>`), which prematurely closes `\[...\]` and renders the rest of the formula as headings and raw text. Write single-line equations on one line, or use `\begin{aligned}` with `&=`:
-
-```markdown
-<!-- ❌ BAD — standalone = and - trigger Setext headings and break \[...\] -->
+<!-- ❌ BAD — standalone = or - triggers Setext heading and breaks \[...\] -->
 \[
 \mathbf{0}
 =
@@ -46,9 +46,44 @@ Inside `\[...\]`, never put `=` or `-` alone on its own line. The chat Markdown 
 \lim_{k\to\infty}\bar{\nu}_{N_k}
 \]
 
-<!-- ✅ GOOD -->
+<!-- ❌ BAD — standalone = between matrices also breaks \[...\] -->
 \[
-\mathbf{0}
-= \Bigl(\lim_{k\to\infty}\bar{\nu}_{N_k}\Bigr)Q - \lim_{k\to\infty}\bar{\nu}_{N_k}
+Q = \left(\begin{array}{c|cc}
+q_{11} & q_{12} & q_{13} \\
+\hline
+0 & q_{22} & q_{23}
+\end{array}\right)
+=
+\begin{pmatrix}
+Q_{TT} & A_1 \\
+0 & Q_1
+\end{pmatrix}
+\]
+
+<!-- ✅ GOOD — single-line chain or &= inside aligned, no standalone = or - -->
+下一词元是 \(z_i^{t+\Delta t}\)。
+
+\[
+\mathbf{0} = \Bigl(\lim_{k\to\infty}\bar{\nu}_{N_k}\Bigr)Q - \lim_{k\to\infty}\bar{\nu}_{N_k} = \pi Q - \pi.
+\]
+
+\[
+\begin{aligned}
+(Q^{s+n+r})_{jj}
+&= \sum_{\ell=1}^K (Q^{s+n})_{j\ell}(Q^r)_{\ell j} \\
+&= \sum_{k=1}^K\sum_{\ell=1}^K (Q^s)_{jk}(Q^n)_{k\ell}(Q^r)_{\ell j} \\
+&\ge (Q^s)_{ji}(Q^n)_{ii}(Q^r)_{ij} > 0.
+\end{aligned}
+\]
+
+\[
+Q = \left(\begin{array}{c|cc}
+q_{11} & q_{12} & q_{13} \\
+\hline
+0 & q_{22} & q_{23}
+\end{array}\right) = \begin{pmatrix}
+Q_{TT} & A_1 \\
+0 & Q_1
+\end{pmatrix}.
 \]
 ```
