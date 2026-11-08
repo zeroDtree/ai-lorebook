@@ -9,24 +9,19 @@ usage() {
   cat >&2 <<EOF
 Usage: $(basename "$0") [OPTIONS]
 
+Copy .cursor/ rules and skills into a target project.
+
 Options:
   -h, --help        Show this help message and exit
   -n, --dry-run     Show what would be done without actually copying
   -f, --force       Skip confirmation when overwriting existing files
   -d, --target-dir DIR
                     Target project directory (default: current directory)
-  --cursor          Copy only .cursor/ (rules, skills, etc.)
-  --copilot         Copy only .github/instructions/
-  --claude          Copy only .claude/rules/
-  --all             Copy all (default)
 
 Examples:
-  $(basename "$0")                              # copy all to current dir
-  $(basename "$0") -d /path/to/project          # copy all to target
-  $(basename "$0") -d /path/to/project --cursor # cursor only
-  $(basename "$0") -d /path/to/project --copilot # copilot only
-  $(basename "$0") -d /path/to/project --claude  # claude only
-  $(basename "$0") -n                           # dry-run to current dir
+  $(basename "$0")                     # copy to current dir
+  $(basename "$0") -d /path/to/project # copy to target
+  $(basename "$0") -n                  # dry-run to current dir
 EOF
   exit 1
 }
@@ -36,7 +31,6 @@ EOF
 DRY_RUN=false
 FORCE=false
 TARGET_DIR="$PWD"
-MODE="all"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -58,22 +52,6 @@ while [[ $# -gt 0 ]]; do
       fi
       TARGET_DIR="$2"
       shift 2
-      ;;
-    --cursor)
-      MODE="cursor"
-      shift
-      ;;
-    --copilot)
-      MODE="copilot"
-      shift
-      ;;
-    --claude)
-      MODE="claude"
-      shift
-      ;;
-    --all)
-      MODE="all"
-      shift
       ;;
     -*)
       echo "error: unknown option '$1'" >&2
@@ -172,17 +150,7 @@ if $DRY_RUN; then
 fi
 echo ""
 
-if [[ "$MODE" == "all" || "$MODE" == "cursor" ]]; then
-  apply_dir ".cursor" ".cursor" "Cursor"
-fi
-
-if [[ "$MODE" == "all" || "$MODE" == "copilot" ]]; then
-  apply_dir ".github/instructions" ".github/instructions" "Copilot instructions"
-fi
-
-if [[ "$MODE" == "all" || "$MODE" == "claude" ]]; then
-  apply_dir ".claude/rules" ".claude/rules" "Claude rules"
-fi
+apply_dir ".cursor" ".cursor" "Cursor"
 
 echo ""
 header "Done"
