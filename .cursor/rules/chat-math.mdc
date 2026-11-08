@@ -33,3 +33,22 @@ $$
 ```
 
 Put each formula in its own delimiter pair. Keep a display formula on its own lines, with a blank line before and after the block.
+
+Inside `\[...\]`, never put `=` or `-` alone on its own line. The chat Markdown parser treats `expr` followed by a standalone `=` or `-` line as a Setext heading (`<h1>` / `<h2>`), which prematurely closes `\[...\]` and renders the rest of the formula as headings and raw text. Write single-line equations on one line, or use `\begin{aligned}` with `&=`:
+
+```markdown
+<!-- ❌ BAD — standalone = and - trigger Setext headings and break \[...\] -->
+\[
+\mathbf{0}
+=
+\Bigl(\lim_{k\to\infty}\bar{\nu}_{N_k}\Bigr)Q
+-
+\lim_{k\to\infty}\bar{\nu}_{N_k}
+\]
+
+<!-- ✅ GOOD -->
+\[
+\mathbf{0}
+= \Bigl(\lim_{k\to\infty}\bar{\nu}_{N_k}\Bigr)Q - \lim_{k\to\infty}\bar{\nu}_{N_k}
+\]
+```
