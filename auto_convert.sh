@@ -18,14 +18,31 @@ if [[ -f CLAUDE.md ]]; then
 fi
 npx --yes ai-rules-converter migrate --from cursor --to copilot
 
+# ai-rules-converter sends every always-apply rule to
+# .github/copilot-instructions.md. The second rule is written to
+# copilot-instructions_converted.md, and each later rule overwrites
+# that file, so only the first and last rules survive. Rebuild the
+# global file from the Cursor sources instead.
 copilot_main=".github/copilot-instructions.md"
-copilot_extra=".github/copilot-instructions_converted.md"
-if [[ -f "$copilot_extra" ]]; then
-  if [[ -f "$copilot_main" ]]; then
+rm -f "$copilot_main" .github/copilot-instructions_converted.md
+copilot_started=0
+for rule in .cursor/rules/*.mdc; do
+  grep -Eq '^alwaysApply:[[:space:]]*true[[:space:]]*$' "$rule" || continue
+  if [[ "$copilot_started" -eq 1 ]]; then
     printf '\n' >>"$copilot_main"
-    cat "$copilot_extra" >>"$copilot_main"
-    rm -f "$copilot_extra"
-  else
-    mv "$copilot_extra" "$copilot_main"
   fi
-fi
+  copilot_started=1
+  awk '
+    BEGIN { state = 0 }
+    state == 0 && /^---[[:space:]]*$/ { state = 1; next }
+    state == 1 && /^---[[:space:]]*$/ { state = 2; next }
+    state == 2 { lines[++n] = $0 }
+    END {
+      start = 1
+      end = n + 0
+      while (start <= end && lines[start] ~ /^[[:space:]]*$/) start++
+      while (end >= start && lines[end] ~ /^[[:space:]]*$/) end--
+      for (i = start; i <= end; i++) print lines[i]
+    }
+  ' "$rule" >>"$copilot_main"
+done

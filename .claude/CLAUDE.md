@@ -1,3 +1,36 @@
+## chat-math
+
+# Chat Math Output
+
+This rule governs math in replies to the user. It does not govern source files whose language uses dollar math, such as Typst, which keeps `$...$` syntax.
+
+In chat, use LaTeX delimiters the chat renderer supports:
+
+- Inline: `\(...\)`
+- Display: `\[...\]`
+
+Do not use `$...$` or `$$...$$` in chat. Single-dollar math is shown as raw source.
+
+Write LaTeX, not Typst, inside those delimiters: `\mathbf{z}`, `\mathcal{L}`, `\frac{a}{b}`. Do not wrap math in backticks.
+
+```markdown
+<!-- ❌ BAD — dollar delimiters render as source -->
+下一词元是 $z_i^{t+\Delta t}$。
+
+$$
+\mathcal{L} = -\sum_i \log q_i
+$$
+
+<!-- ✅ GOOD -->
+下一词元是 \(z_i^{t+\Delta t}\)。
+
+\[
+\mathcal{L} = -\sum_i \log q_i
+\]
+```
+
+Put each formula in its own delimiter pair. Keep a display formula on its own lines, with a blank line before and after the block.
+
 ## english-code-generate
 
 # English Code Generation

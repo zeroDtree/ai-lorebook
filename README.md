@@ -45,13 +45,3 @@ Brief usage examples:
 
 - **python-ruff-ty:** `/python-ruff-ty`
 - **security-review:** `/security-review` or `/security-review src/auth/`
-
-## Included rules
-
-| Rule                              | Cursor (`.mdc`) | Copilot (`.instructions.md`) | Claude (`.md`) |
-| --------------------------------- | :-------------: | :--------------------------: | :------------: |
-| English code generation           |        ✓        |              ✓               |       ✓        |
-| Python environment (uv/venv)      |        ✓        |              ✓               |       ✓        |
-| Python quality checks (ruff + ty) |        ✓        |              ✓               |       ✓        |
-| Typst math spacing                |        ✓        |              ✓               |       ✓        |
-| Typst syntax                      |        ✓        |              ✓               |       ✓        |
