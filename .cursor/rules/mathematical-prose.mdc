@@ -1,0 +1,38 @@
+---
+description: Mathematical prose without stock AI phrasing
+alwaysApply: true
+---
+
+# Mathematical Prose
+
+Apply when writing exposition: notes, proofs, and explanations in documents or replies.
+
+## Diction
+
+Use the standard term for the notion. Keep the register of a paper.
+
+Avoid colloquial wording, ornamental metaphors, and phrasing that reads as a calque from English.
+
+## Sentence shape
+
+State the claim directly.
+
+Paired negations are a marked construction. Use them only when the contrast itself is the claim. Do not make them the default frame. In Chinese, this includes 「不是……而是……」 and 「只要求……不要求……」. In English, this includes "not X, but Y" and "requires only X, not Y".
+
+## Economy
+
+Each sentence should add a definition, a hypothesis, a step, or a consequence.
+
+Omit emphasis, transitions, and summaries that add no statement. Omit section previews, advance descriptions of a proof, restatements of a conclusion, and remarks that only justify the exposition.
+
+Do not repeat a definition, hypothesis, or conclusion already fixed in the text.
+
+## Connectives
+
+Keep the connectives the argument needs, so the text stays continuous. Typical choices: if, then, therefore, hence, conversely; 设, 若, 则, 因此, 从而, 反之.
+
+```text
+Bad: 本节首先给出定义，然后证明定理。需要指出的是，这里不是要求可微，而是只要求连续。综上所述，连续已足够。
+
+Good: 设 f 在 [a,b] 上连续。则 f 在 [a,b] 上 Riemann 可积。
+```
