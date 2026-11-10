@@ -1,0 +1,58 @@
+---
+description: Expository and technical prose without stock AI phrasing
+alwaysApply: true
+---
+
+# Expository Prose
+
+Apply when writing exposition: notes, documentation, proofs, and explanations in documents or replies.
+
+## Diction
+
+Use the standard term for the notion. Keep the register of a paper or technical manual.
+
+Avoid colloquial wording, ornamental metaphors, and phrasing that reads as a calque from English.
+
+Avoid stock AI clichés and degree adverbs. In Chinese, this includes 「本质区别」「截然不同」「核心思想是」「不难看出」「由此可见」「极大地缓解」「严格厘清」「尤为重要」. In English, this includes "fundamentally different", "diametrically opposed", "the core idea is", "it is easy to see", "greatly alleviates", "strictly clarify", and "particularly important".
+
+## Sentence shape
+
+State the claim directly.
+
+Paired negations are a marked construction. Use them only when the contrast itself is the claim. Do not make them the default frame. In Chinese, this includes 「不是……而是……」 and 「只要求……不要求……」. In English, this includes "not X, but Y" and "requires only X, not Y".
+
+## Economy and transitions
+
+Each sentence should add a definition, a hypothesis, a fact, a step, or a consequence.
+
+Omit lengthy lead-ins, filler transitions, and summaries that add no statement. Omit section previews, advance descriptions of an argument or proof, restatements of a conclusion, and remarks that only justify the exposition.
+
+Avoid slogan-like or textbook-style rhetoric and forced elevation.
+
+Do not repeat a definition, hypothesis, or conclusion already fixed in the text.
+
+## Connectives
+
+Keep the connectives the argument needs, so the text stays continuous. Typical choices: if, then, therefore, hence, conversely; 设, 若, 则, 因此, 从而, 反之.
+
+## Structure and visuals
+
+Let the material determine the section structure. Avoid formulaic genres such as "Common Misconceptions" (「常见误区盘点」) unless requested.
+
+Use tables and diagrams only when they convey structure that prose cannot state as compactly. Avoid redundant comparison tables and dual flowcharts where form outweighs substance.
+
+## Typography and glosses
+
+Reserve boldface for defined terms or short labels. Do not bold entire conclusion sentences across paragraphs.
+
+Add a parenthetical English gloss only when introducing a specialized or ambiguous term. Do not attach English glosses to ordinary concepts.
+
+```text
+Bad: 本节首先给出定义，然后证明定理。需要指出的是，这里不是要求可微，而是只要求连续。综上所述，连续已足够。
+
+Good: 设 f 在 [a,b] 上连续。则 f 在 [a,b] 上 Riemann 可积。
+
+Bad: 在深入理解这一机制之前，严格厘清两者的本质区别尤为重要。核心思想是，缓存（Cache）与缓冲区（Buffer）截然不同：**缓存极大地缓解了重复读取的开销，而缓冲区则致力于抹平上下游的速度差异。**
+
+Good: 缓存保留近期读取的数据以减少重复访问；缓冲区暂存传输中的数据以吸收生产与消费的速率差。
+```

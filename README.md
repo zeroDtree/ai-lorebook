@@ -34,7 +34,6 @@ Identical files are skipped; differing files require `-f` to overwrite.
 | `chat-math`             | always                   | Render chat math with `\(...\)` and `\[...\]`.                   |
 | `english`               | always                   | Use English for new names, code, and documentation.              |
 | `english-code-generate` | always                   | Write generated code, comments, and docstrings in English.       |
-| `mathematical-prose`    | always                   | Write mathematical exposition without stock AI phrasing.         |
 | `notation-conventions`  | `*.typ`, `*.tex`, `*.md` | Follow project math, logic, and computer notation.               |
 | `python-env`            | `*.py`                   | Run Python with `uv run` or an activated `.venv`.                |
 | `python-quality-checks` | `*.py`                   | Run `uv run ruff check` and `uv run ty check` before finishing.  |
@@ -42,3 +41,4 @@ Identical files are skipped; differing files require `-f` to overwrite.
 | `typst-math-spacing`    | `*.typ`                  | Apply project spacing and notation in Typst math.                |
 | `typst-strong`          | `*.typ`                  | Use Typst `*...*` or `#strong[...]` for bold emphasis.           |
 | `typst-syntax`          | `*.typ`                  | Keep Typst inline code and math unnested.                        |
+| `wo-AI-phrasing`        | always                   | Write expository and technical prose without stock AI phrasing.  |
